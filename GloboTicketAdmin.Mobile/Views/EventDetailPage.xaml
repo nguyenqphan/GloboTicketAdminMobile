@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GloboTicketAdmin.Mobile.Views.EventDetailPage"
              xmlns:vm="clr-namespace:GloboTicketAdmin.Mobile.ViewModels"
+             xmlns:converters="clr-namespace:GloboTicketAdmin.Mobile.Converters"
              Title="EventDetailPage">
-    
-        <Grid>
+    <ContentPage.Resources>
+        <converters:StatusEnumToTextConverter x:Key="StatusEnumToTextConverter" />
+    </ContentPage.Resources>
+
+    <Grid>
         <ScrollView>
             <Grid>
                 <VerticalStackLayout Padding="10">
@@ -75,7 +79,7 @@
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Style="{StaticResource ValueLabelStyle}" 
-                                Text="{Binding EventStatus}"/>
+                                Text="{Binding EventStatus, Converter={StaticResource StatusEnumToTextConverter}}"/>
 
                             <!-- Row 4 Date -->
                             <Label
