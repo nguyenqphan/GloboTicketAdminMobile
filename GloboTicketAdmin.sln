@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36310.24 d17.14
+VisualStudioVersion = 17.14.36310.24
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTicketAdmin.Mobile", "GloboTicketAdmin.Mobile\GloboTicketAdmin.Mobile.csproj", "{51E07535-AC75-4FE9-B4F8-543E88756701}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTicket.Admin.API", "..\..\..\..\Users\nguye\Downloads\building-dot-net-maui-applications-mvvm\materials\M6\GloboTicket.Admin.API\GloboTicket.Admin.API.csproj", "{5AD35E32-2E8A-E4B6-E2B3-2E2AF277A8F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{51E07535-AC75-4FE9-B4F8-543E88756701}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51E07535-AC75-4FE9-B4F8-543E88756701}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51E07535-AC75-4FE9-B4F8-543E88756701}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5AD35E32-2E8A-E4B6-E2B3-2E2AF277A8F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD35E32-2E8A-E4B6-E2B3-2E2AF277A8F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD35E32-2E8A-E4B6-E2B3-2E2AF277A8F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD35E32-2E8A-E4B6-E2B3-2E2AF277A8F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
