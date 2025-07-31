@@ -1,194 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+
 
 namespace GloboTicketAdmin.Mobile.ViewModels
 {
-    public class EventDetailViewModel : INotifyPropertyChanged
+    public partial class EventDetailViewModel : ObservableObject
     {
+        [ObservableProperty]
         private Guid _id;
+
+        [ObservableProperty]
         private string _name = default!;
+
+        [ObservableProperty]
         private double _price;
-        private string _imageUrl = default!;
+
+        [ObservableProperty]
+        private string _imageUrl;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CancelEventCommand))]
         private EventStatusEnum _eventStatus;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CancelEventCommand))]
         private DateTime _date = DateTime.Now;
-        private string _description = default!;
-        private List<string> _artists = new List<string>();
-        private CategoryViewModel _category = default!;
 
-        public Guid Id
-        {
-            get => _id;
-            set
-            {
-                if (!_id.Equals(value))
-                {
-                    _id = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        [ObservableProperty]
+        private string _description;
 
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                if (_name != value)
-                {
-                    _name = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        [ObservableProperty]
+        private List<string> _artists = new();
 
-        public double Price
-        {
-            get => _price;
-            set
-            {
-                if (_price != value)
-                {
-                    _price = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        [ObservableProperty]
+        private CategoryViewModel _category = new();
 
-        public string ImageUrl
-        {
-            get => _imageUrl;
-            set
-            {
-                if (_imageUrl != value)
-                {
-                    _imageUrl = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public EventStatusEnum EventStatus
-        {
-            get => _eventStatus;
-            set
-            {
-                if (_eventStatus != value)
-                {
-                    _eventStatus = value;
-                    OnPropertyChanged();
-                    ((Command)CancelEventCommand).ChangeCanExecute();
-                }
-            }
-        }
-
-        public DateTime Date
-        {
-            get => _date;
-            set
-            {
-                if (_date != value)
-                {
-                    _date = value;
-                    OnPropertyChanged();
-                    ((Command)CancelEventCommand).ChangeCanExecute();
-                }
-            }
-        }
-
-        public string Description
-        {
-            get => _description;
-            set
-            {
-                if (_description != value)
-                {
-                    _description = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public List<string> Artists
-        {
-            get => _artists;
-            set
-            {
-                if (_artists != value)
-                {
-                    _artists = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public CategoryViewModel Category
-        {
-            get => _category;
-            set
-            {
-                if (_category != value)
-                {
-                    _category = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ShowThumbnailImage))]
         private bool _showLargerImage;
-        public bool ShowLargerImage
-        {
-            get => _showLargerImage;
-            set
-            {
-                if (_showLargerImage != value)
-                {
-                    _showLargerImage = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(ShowThumbnailImage));
-                }
-            }
-        }
+
         public bool ShowThumbnailImage => !ShowLargerImage;
 
-        public ICommand CancelEventCommand { get; }
+        [RelayCommand(CanExecute = nameof(CanCancelEvent))]
+        private void CancelEvent() => EventStatus = EventStatusEnum.Cancelled;
 
-        private void CancelEvent()
-        {
-            EventStatus = EventStatusEnum.Canceled;
-        }
+        private bool CanCancelEvent() => EventStatus != EventStatusEnum.Cancelled && Date.AddHours(-4) > DateTime.Now;
 
-        private bool CanCancelEvent() =>
-            EventStatus != EventStatusEnum.Canceled && Date.AddHours(-4) > DateTime.Now;
         public EventDetailViewModel()
         {
-            CancelEventCommand = new Command(CancelEvent, CanCancelEvent);
-
-            Id = Guid.NewGuid();
-            Name = "Nguyen";
-            Price = 100.0;
+            Id = Guid.Parse("EE272F8B-6096-4CB6-8625-BB4BB2D89E8B");
+            Name = "John Egberts Live";
+            Price = 65;
             ImageUrl = "https://lindseybroospluralsight.blob.core.windows.net/globoticket/images/banjo.jpg";
-            EventStatus = EventStatusEnum.Onsale;
+            EventStatus = EventStatusEnum.OnSale;
             Date = DateTime.Now.AddMonths(6);
-            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-            Artists = new List<string> { "Artist 1", "Artist 2", "Artist 3" };
-            Category = new CategoryViewModel()
+            Description =
+                "Join John for his farewell tour across 15 continents. John really needs no introduction since he has already mesmerized the world with his banjo.";
+            Artists = new List<string> { "John Egbert", "Jane Egbert" };
+            Category = new CategoryViewModel
             {
-                Id = Guid.NewGuid(),
-                Name = "Music"
+                Id = Guid.Parse("B0788D2F-8003-43C1-92A4-EDC76A7C5DDE"),
+                Name = "Concert"
             };
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
+
 }

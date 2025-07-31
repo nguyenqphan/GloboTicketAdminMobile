@@ -19,10 +19,10 @@ namespace GloboTicketAdmin.Mobile.Converters
 
             return status switch
             {
-                EventStatusEnum.Onsale => "On Sale",
+                EventStatusEnum.OnSale => "On Sale",
                 EventStatusEnum.AlmostSoldOut => "Almost Sold Out",
                 EventStatusEnum.SalesClosed => "Sales Closed",
-                EventStatusEnum.Canceled => "Canceled",
+                EventStatusEnum.Cancelled => "Cancelled",
                 _ => string.Empty
             };
         }
