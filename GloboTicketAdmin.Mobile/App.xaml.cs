@@ -8,7 +8,7 @@ namespace GloboTicketAdmin.Mobile
         {
             InitializeComponent();
 
-            MainPage = new EventDetailPage();
+            MainPage = new EventOverviewPage();
         }
     }
 }
