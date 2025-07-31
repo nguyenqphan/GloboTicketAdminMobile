@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace GloboTicketAdmin.Mobile.ViewModels
 {
@@ -81,6 +82,7 @@ namespace GloboTicketAdmin.Mobile.ViewModels
                 {
                     _eventStatus = value;
                     OnPropertyChanged();
+                    ((Command)CancelEventCommand).ChangeCanExecute();
                 }
             }
         }
@@ -94,6 +96,7 @@ namespace GloboTicketAdmin.Mobile.ViewModels
                 {
                     _date = value;
                     OnPropertyChanged();
+                    ((Command)CancelEventCommand).ChangeCanExecute();
                 }
             }
         }
@@ -153,8 +156,19 @@ namespace GloboTicketAdmin.Mobile.ViewModels
         }
         public bool ShowThumbnailImage => !ShowLargerImage;
 
+        public ICommand CancelEventCommand { get; }
+
+        private void CancelEvent()
+        {
+            EventStatus = EventStatusEnum.Canceled;
+        }
+
+        private bool CanCancelEvent() =>
+            EventStatus != EventStatusEnum.Canceled && Date.AddHours(-4) > DateTime.Now;
         public EventDetailViewModel()
         {
+            CancelEventCommand = new Command(CancelEvent, CanCancelEvent);
+
             Id = Guid.NewGuid();
             Name = "Nguyen";
             Price = 100.0;
