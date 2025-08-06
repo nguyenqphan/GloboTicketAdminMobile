@@ -12,6 +12,6 @@ namespace GloboTicketAdmin.Mobile.Repositories
     {
         Task<List<EventModel>> GetEvents();
         Task<EventModel?> GetEvent(Guid id);
-        Task<bool> UpdateStatus(Guid id, EventStatusEnum status);
+        Task<bool> UpdateStatus(Guid id, EventStatusModel status);
     }
 }

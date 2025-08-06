@@ -56,7 +56,7 @@ namespace GloboTicketAdmin.Mobile.Repositories
             }
         }
 
-        public async Task<bool> UpdateStatus(Guid id, EventStatusEnum status)
+        public async Task<bool> UpdateStatus(Guid id, EventStatusModel status)
         {
             using HttpClient client = _httpClientFactory.CreateClient("GloboTicketAdminApiClient");
             try

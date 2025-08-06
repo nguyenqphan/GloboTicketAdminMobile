@@ -1,5 +1,8 @@
 ﻿
+using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using GloboTicketAdmin.Mobile.Models;
+using GloboTicketAdmin.Mobile.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,72 +14,49 @@ namespace GloboTicketAdmin.Mobile.ViewModels
 {
     public partial class EventListOverviewViewModel : ObservableObject
     {
-        [ObservableProperty]
-        private ObservableCollection<EventListItemViewModel> _events = new();
+        private readonly IEventService _eventService;
 
-        [ObservableProperty]
-        private EventListItemViewModel? _selectedEvent;
+        [ObservableProperty] private ObservableCollection<EventListItemViewModel> _events = new();
 
-        public EventListOverviewViewModel()
+        [ObservableProperty] private EventListItemViewModel? _selectedEvent;
+
+        public EventListOverviewViewModel(IEventService eventService)
         {
-            Events = new ObservableCollection<EventListItemViewModel>
+            _eventService = eventService;
+
+            GetEvents();
+        }
+
+        private async void GetEvents()
+        {
+            List<EventModel> events = await _eventService.GetEvents();
+            List<EventListItemViewModel> listItems = new();
+            foreach (var @event in events)
             {
-                new(Guid.Parse("{EE272F8B-6096-4CB6-8625-BB4BB2D89E8B}"),
-                    "John Egbert Live",
-                    65,
-                    DateTime.Now.AddMonths(6),
-                    new List<string> { "John Egbert", "Jane Egbert" },
-                    EventStatusEnum.OnSale,
-                    "https://lindseybroospluralsight.blob.core.windows.net/globoticket/images/banjo.jpg",
-                    new CategoryViewModel
-                    {
-                        Id = Guid.Parse("B0788D2F-8003-43C1-92A4-EDC76A7C5DDE"),
-                        Name = "Concert"
-                    }),
-                new(Guid.Parse("{3448D5A4-0F72-4DD7-BF15-C14A46B26C00}"),
-                    "The State of Affairs: Michael Live!", 85,
-                    DateTime.Now.AddMonths(9),
-                    new List<string> { "John Johnson" },
-                    EventStatusEnum.OnSale,
-                    "https://lindseybroospluralsight.blob.core.windows.net/globoticket/images/michael.jpg",
-                    new CategoryViewModel
-                    {
-                        Id = Guid.Parse("B0788D2F-8003-43C1-92A4-EDC76A7C5DDE"),
-                        Name = "Concert"
-                    })
+                listItems.Add(MapEventModelToEventListItemViewModel(@event));
+            }
+
+            Events.Clear();
+            Events = listItems.ToObservableCollection();
+        }
+
+        private EventListItemViewModel MapEventModelToEventListItemViewModel(EventModel @event)
+        {
+            var category = new CategoryViewModel
+            {
+                Id = @event.Category.Id,
+                Name = @event.Category.Name,
             };
 
-            AddEvent();
-            ChangeEvent();
-        }
-
-        private async void AddEvent()
-        {
-            await Task.Delay(5000);
-
-            var @event = new EventListItemViewModel(Guid.Parse("{B419A7CA-3321-4F38-BE8E-4D7B6A529319}"),
-                "Clash of the DJs",
-                85,
-                DateTime.Now.AddMonths(4), new List<string> { "DJ 'The Mike'" },
-                EventStatusEnum.SalesClosed,
-                "https://lindseybroospluralsight.blob.core.windows.net/globoticket/images/dj.jpg",
-                new CategoryViewModel
-                {
-                    Id = Guid.Parse("B0788D2F-8003-43C1-92A4-EDC76A7C5DDE"),
-                    Name = "Concert"
-                });
-
-            Events.Add(@event);
-
-        }
-        private async void ChangeEvent()
-        {
-            await Task.Delay(5000);
-            
-            var firstEvent = Events.First();
-            firstEvent.Price = 99.99;
-            firstEvent.Name = "Updated";
-
+            return new EventListItemViewModel(
+                @event.Id,
+                @event.Name,
+                @event.Price,
+                @event.Date,
+                @event.Artists,
+                (EventStatusEnum)@event.EventStatus,
+                @event.ImageUrl,
+                category);
         }
     }
 }

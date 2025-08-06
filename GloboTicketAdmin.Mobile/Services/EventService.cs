@@ -28,7 +28,7 @@ namespace GloboTicketAdmin.Mobile.Services
             return await _eventRepository.GetEvents();
         }
 
-        async Task<bool> IEventService.UpdateStatus(Guid id, EventStatusEnum status)
+        async Task<bool> IEventService.UpdateStatus(Guid id, EventStatusModel status)
         {
             return await _eventRepository.UpdateStatus(id, status);
         }
